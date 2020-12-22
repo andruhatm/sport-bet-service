@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+ext{
+  secVer = "2.3.6.RELEASE"
+}
+
+group 'ru.andruha|tm'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+  implementation "org.springframework.boot:spring-boot-starter-security:$secVer"
+  implementation "javax:javaee-api:8.0.1"
+}

@@ -1,0 +1,4 @@
+rootProject.name = 'SportBetsService'
+include 'data'
+include 'security'
+
