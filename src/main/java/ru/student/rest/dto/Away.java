@@ -2,10 +2,20 @@ package ru.student.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Dto класс для приезжей команды.
+ *
+ * @author andruha.tm
+ */
 public class Away {
+  /**
+   * поле айди
+   */
   @JsonProperty("id")
   private Long away_id;
-
+  /**
+   * имя приезжей команды
+   */
   @JsonProperty("name")
   private String away;
 

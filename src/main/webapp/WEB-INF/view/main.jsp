@@ -23,6 +23,7 @@
     <th>Prediction</th>
     <th>Bet</th>
     <th>Currency</th>
+    <th>Result</th>
   </tr>
 <c:forEach var="bet" items="${betList}">
   <tr>
@@ -30,6 +31,14 @@
     <td>${bet.winner}</td>
     <td>${bet.amount}</td>
     <td>${bet.currency.name}</td>
+    <c:choose>
+      <c:when test="${bet.winner==bet.real_winner}">
+        <td>Win</td>
+      </c:when>
+      <c:otherwise>
+        <td>Loss</td>
+      </c:otherwise>
+    </c:choose>
   </tr>
 </c:forEach>
 </table>

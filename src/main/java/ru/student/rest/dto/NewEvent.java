@@ -5,15 +5,35 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.sql.Timestamp;
 
+/**
+ * Dto класс для нового события.
+ *
+ * @author andruha.tm
+ */
 public class NewEvent {
+  /**
+   * айди события
+   */
   @JsonProperty("id")
   private Long event_id;
+  /**
+   * дата
+   */
   @JsonProperty("time")
   private Timestamp time;
+  /**
+   * имя события
+   */
   @JsonProperty("league")
   private League league;
+  /**
+   * поле домашней команды
+   */
   @JsonProperty("home")
   private Home home;
+  /**
+   * поле приезжей команды
+   */
   @JsonProperty("away")
   private Away away;
 

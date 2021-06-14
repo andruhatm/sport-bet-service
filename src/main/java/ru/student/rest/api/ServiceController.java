@@ -29,13 +29,24 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+/**
+ * Контроллер для действий пользователя.
+ *
+ * @author andruha.tm
+ */
 @RestController
 public class ServiceController {
-
+  /**
+   * поле репозитория пользователей
+   */
   private final UserRepo userRepo;
-
+  /**
+   * поле репозитория событий
+   */
   private final EventRepo eventRepo;
-
+  /**
+   * поле репозитория ставок
+   */
   private final BetRepo betRepo;
 
   @Autowired
@@ -45,6 +56,13 @@ public class ServiceController {
     this.betRepo = betRepo;
   }
 
+  /**
+   * Входит в аккаунт пользователя
+   * @param principal текущий пользователь
+   * @param model модель для передачи данных
+   * @return возвращает страницу текущего пользователя
+   * @throws UnsupportedEncodingException
+   */
   @GetMapping("/account")
   public ModelAndView getAccount(Principal principal, Model model) throws UnsupportedEncodingException {
 
@@ -66,6 +84,14 @@ public class ServiceController {
     return new ModelAndView("account");
   }
 
+
+  /**
+   * Возвращает список данных пользователя
+   * @param principal текущий пользователь
+   * @param model модель для передачи данных
+   * @return страница со ставками текущего пользователя
+   * @throws UnsupportedEncodingException
+   */
   @GetMapping("/mybets")
   public ModelAndView getBets(Principal principal, Model model) throws UnsupportedEncodingException {
 
@@ -82,32 +108,38 @@ public class ServiceController {
     return new ModelAndView("main");
   }
 
+  /**
+   * Переход на страницу событий
+   * @param model модель для передачи данных
+   * @return страница событий
+   * @throws IOException
+   */
   @GetMapping()
   @RequestMapping("/events")
   ModelAndView getEvents(Model model) throws IOException {
 
-    HttpRequest request = HttpRequest.newBuilder()
-      .uri(URI.create("https://betsapi2.p.rapidapi.com/v1/bet365/upcoming?sport_id=3"))
-      .header("x-rapidapi-key", "0f5f6d83d7mshe1afc3e7efdd342p1572eajsn86d5ca57de38")
-      .header("x-rapidapi-host", "betsapi2.p.rapidapi.com")
-      .method("GET", HttpRequest.BodyPublishers.noBody())
-      .build();
-    HttpResponse<String> response = null;
-    try {
-      response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-    } catch (IOException | InterruptedException exception) {
-      exception.printStackTrace();
-    }
-
-    if (response != null) {
-      System.out.println("response not null");
+//    HttpRequest request = HttpRequest.newBuilder()
+//      .uri(URI.create("https://betsapi2.p.rapidapi.com/v1/bet365/upcoming?sport_id=3"))
+//      .header("x-rapidapi-key", System.getenv("ACCESS_TOKEN"))
+//      .header("x-rapidapi-host", "betsapi2.p.rapidapi.com")
+//      .method("GET", HttpRequest.BodyPublishers.noBody())
+//      .build();
+//    HttpResponse<String> response = null;
+//    try {
+//      response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+//    } catch (IOException | InterruptedException exception) {
+//      exception.printStackTrace();
+//    }
+//
+//    if (response != null) {
+//      System.out.println("response not null");
       ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 //      by api
-      List<NewEvent> eventList = mapper.readValue(
-        response.body().substring(66),
-        mapper.getTypeFactory().constructCollectionType(List.class, NewEvent.class)
-      );
+//      List<NewEvent> eventList = mapper.readValue(
+//        response.body().substring(66),
+//        mapper.getTypeFactory().constructCollectionType(List.class, NewEvent.class)
+//      );
 
 //      by file
 //      List<NewEvent> eventList = mapper.readValue(
@@ -115,29 +147,30 @@ public class ServiceController {
 //        mapper.getTypeFactory().constructCollectionType(List.class, NewEvent.class)
 //      );
 
-      for(NewEvent event: eventList){
-        Event exitstingEvent = eventRepo.getByName(event.getLeague().getName());
-        if(exitstingEvent == null){
-          Event event1 = new Event(
-            event.getEvent_id(),
-            event.getTime(),
-            event.getLeague().getName(),
-            event.getHome().getHome(),
-            event.getAway().getAway()
-          );
-          eventRepo.save(event1);
-          System.out.println(event1.toString());
-        }
-      }
+//      for(NewEvent event: eventList){
+//        Event exitstingEvent = eventRepo.getByName(event.getLeague().getName());
+//        if(exitstingEvent == null){
+//          System.out.println("new event");
+//          Event event1 = new Event(
+//            event.getEvent_id(),
+//            event.getTime(),
+//            event.getLeague().getName(),
+//            event.getHome().getHome(),
+//            event.getAway().getAway()
+//          );
+//          eventRepo.save(event1);
+//          System.out.println(event1.toString());
+//        }
+//      }
       List<Event> dbeventsList = new ArrayList<>(eventRepo.findAll());
       model.addAttribute("formatter",new TimestampFormatter());
       model.addAttribute("dbEventsList",dbeventsList);
       return new ModelAndView("new");
-    }
-    else {
-      System.out.println("response is null");
-    }
+//    }
+//    else {
+//      System.out.println("response is null");
+//    }
 
-    return new ModelAndView("new");
+//    return new ModelAndView("new");
   }
 }

@@ -2,32 +2,60 @@ package ru.student.data.model;
 
 import javax.persistence.*;
 
+/**
+ * Таблица ставки.
+ * @author andruha.tm
+ */
 @Entity
 @Table(name = "bets", schema = "public")
 public class Bet {
 
+  /**
+   * поле айди
+   */
   @Id
   @Column(name = "bet_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  /**
+   * поле события {@link Event}
+   */
   @ManyToOne
   @JoinColumn(name = "event_id")
   private Event event;
 
+  /**
+   * поле валюты {@link Currency}
+   */
   @ManyToOne(targetEntity = Currency.class)
   @JoinColumn(name = "currency_id")
   private Currency currency;
 
+  /**
+   * поле юзера {@link User}
+   */
   @ManyToOne(targetEntity = User.class)
   @JoinColumn(name = "client_id")
   private User user;
 
+  /**
+   * поле величина ставки
+   */
   @Column(name = "amount")
   private Double amount;
 
+  /**
+   * поле предположительный победитель
+   */
   @Column(name = "prediction")
   private String winner;
+
+  /**
+   * поле победитель
+   */
+  @Column(name = "winner")
+  private String real_winner;
 
   public Bet() {
   }
@@ -86,6 +114,14 @@ public class Bet {
 
   public void setWinner(String winner) {
     this.winner = winner;
+  }
+
+  public String getReal_winner() {
+    return real_winner;
+  }
+
+  public void setReal_winner(String real_winner) {
+    this.real_winner = real_winner;
   }
 
   @Override

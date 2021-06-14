@@ -4,20 +4,39 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
 
+/**
+ * Таблица событий.
+ * @author andruha.tm
+ */
 @Entity
 @Table(name = "events", schema = "public")
 public class Event {
 
+  /**
+   * поле айди
+   */
   @Id
   @Column(name = "event_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  /**
+   * поле даты события
+   */
   @Column
   private Timestamp date;
+  /**
+   * наименование события
+   */
   @Column
   private String name;
+  /**
+   * имя домашней команды
+   */
   @Column(name = "home_team")
   private String home;
+  /**
+   * имя приезжей команды
+   */
   @Column(name = "away_team")
   private String away;
 

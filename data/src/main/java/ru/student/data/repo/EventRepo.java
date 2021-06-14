@@ -7,6 +7,11 @@ import ru.student.data.model.Event;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
+/**
+ * Репозиторий для событий.
+ *
+ * @author andruha.tm
+ */
 @Repository
 public interface EventRepo extends JpaRepository<Event,String> {
 

@@ -2,10 +2,20 @@ package ru.student.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Dto класс для домашней команды.
+ *
+ * @author andruha.tm
+ */
 public class Home {
+  /**
+   * айди команды
+   */
   @JsonProperty("id")
   private Long home_id;
-
+  /**
+   * имя домашней команды
+   */
   @JsonProperty("name")
   private String home;
 

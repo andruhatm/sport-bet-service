@@ -11,6 +11,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import ru.student.data.DataConfiguration;
 import ru.student.security.WebSecurityConfiguration;
 
+/**
+ * Главный класс из которого происходит инициализация основного контекста приложения.
+ * Данный модуль будет являться верхним уровнем приложения. В нем будут реализованы все конечные точки нашего REST API.
+ *
+ * @author andruha.tm
+ */
 @SpringBootApplication
 @Import({
   DataConfiguration.class,

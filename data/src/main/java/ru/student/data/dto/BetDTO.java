@@ -1,8 +1,22 @@
 package ru.student.data.dto;
 
+/**
+ * Dto класс для ставки.
+ *
+ * @author andruha.tm
+ */
 public class BetDTO {
+  /**
+   * имя команды победителя
+   */
   private String winner;
+  /**
+   * величина ставки
+   */
   private Double money;
+  /**
+   * тип валюты
+   */
   private String currency;
 
   public String getWinner() {

@@ -9,6 +9,12 @@ import ru.student.data.repo.PhotoRepo;
 
 import java.io.IOException;
 
+
+/**
+ * Сервис для фото профиля.
+ *
+ * @author andruha.tm
+ */
 @Service
 public class PhotoService {
 

@@ -14,6 +14,11 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.sql.DataSource;
 
+/**
+ * Класс кофигурации для модуля Security
+ *
+ * @author andruha.tm
+ */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -31,7 +36,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     http
       .csrf().disable()
       .authorizeRequests()
-        .antMatchers("/","/register","/favicon.ico").permitAll()
+        .antMatchers("/","/register","/favicon.ico","/css/**", "/js/**", "/images/**").permitAll()
         .anyRequest().authenticated()
       .and()
         .formLogin()
@@ -40,6 +45,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
       .and()
         .logout()
         .permitAll();
+
   }
 
   @Override
@@ -51,19 +57,4 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
       .authoritiesByUsernameQuery("SELECT cl.username, ur.roles FROM \"clients\" cl inner join \"user_role\" ur on cl.client_id = ur.user_id WHERE cl.username = ?");
   }
 
-  @Bean(name = "multipartResolver")
-  public CommonsMultipartResolver getCommonsMultipartResolver() {
-    CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-    multipartResolver.setMaxUploadSize(20971520);   // 20MB
-    multipartResolver.setMaxInMemorySize(1048576);  // 1MB
-    return multipartResolver;
-  }
-
-
-
-//  @Bean(name="entityManagerFactory")
-//  public LocalSessionFactoryBean sessionFactory() {
-//
-//    return new LocalSessionFactoryBean();
-//  }
 }

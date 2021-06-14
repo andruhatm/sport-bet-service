@@ -2,10 +2,17 @@ package ru.student.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Dto класс для названия события.
+ *
+ * @author andruha.tm
+ */
 public class League {
   @JsonProperty("id")
   private Long id;
-
+  /**
+   * название события
+   */
   @JsonProperty("name")
   private String name;
 

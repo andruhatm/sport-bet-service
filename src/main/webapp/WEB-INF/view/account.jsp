@@ -40,6 +40,9 @@
 
       <img src="data:image/jpeg;base64,${base64DataString}"  width="150" height="150" alt=""/>
     </div>
+    <div>
+      <h3>Your balance: <c:out value="${user.balance}"/> </h3>
+    </div>
 </div>
     <input type="submit" value="Sign Out"/>
   </form>

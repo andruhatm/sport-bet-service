@@ -5,15 +5,28 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
+/**
+ * Таблица фото профиля.
+ * @author andruha.tm
+ */
 @Entity
 @Table(name = "photos", schema = "public")
 public class Photo {
+  /**
+   * айди файла
+   */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "file_id")
   private Long id;
+  /**
+   * имя файла
+   */
   @Column(name = "name", nullable = false)
   private String name;
+  /**
+   * тип файла
+   */
   @Column(name = "type", nullable = false)
   private String type;
   public Photo() {
