@@ -1,0 +1,35 @@
+version: '3.1'
+
+volumes:
+  postgres_volume:
+
+services:
+  app:
+    container_name: course_backend
+    image: course
+    build:
+      context: .
+#    restart: always
+    ports:
+      - "9000:8080"
+    depends_on:
+      - course_db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://course_db:5432/course
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=123
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
+      - ACCESS_TOKEN=0f5f6d83d7mshe1afc3e7efdd342p1572eajsn86d5ca57de38
+      - TZ=Europe/Moscow
+  course_db:
+    container_name: course_db
+    image: library/postgres:13
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+    restart: always
+    ports:
+    - "5435:5432"
+    environment:
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=events

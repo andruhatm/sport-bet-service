@@ -1,18 +1,27 @@
 package ru.student.rest.api;
 
+import config.secure.JwtSupplier;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
+import ru.student.data.dto.AuthInfoDto;
+import ru.student.data.dto.UserDto;
+import ru.student.data.mapstruct.UserStruct;
 import ru.student.data.model.Role;
 import ru.student.data.model.User;
 import ru.student.data.repo.UserRepo;
+import ru.student.rest.exception.EmailAlreadyInUseException;
 import ru.student.rest.service.PhotoService;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.util.Collections;
+
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * Контроллер для Регистрации.
@@ -20,80 +29,99 @@ import java.util.Collections;
  * @author andruha.tm
  */
 @RestController
+@RequestMapping("/security/")
 public class PublicController {
 
   /**
    * поле репозитория пользователей
    */
   private final UserRepo userRepo;
+
   /**
    * поле репозитория фото
    */
   private final PhotoService photoService;
 
+  /**
+   * Маппер для пользователей
+   */
+  private final UserStruct userStruct;
+
+  /**
+   * Енкодер пароля
+   */
+  private final PasswordEncoder passwordEncoder;
+
+  /**
+   * Генератор токенов
+   */
+  private final JwtSupplier jwtSupplier;
+
   @Autowired
-  public PublicController(UserRepo userRepo, PhotoService photoService) {
+  public PublicController(UserRepo userRepo, PhotoService photoService, UserStruct userStruct, PasswordEncoder passwordEncoder, JwtSupplier jwtSupplier) {
+    this.jwtSupplier = jwtSupplier;
+    this.passwordEncoder = passwordEncoder;
+    this.userStruct = userStruct;
     this.userRepo = userRepo;
     this.photoService = photoService;
   }
 
   /**
-   * Получение главной страницы сайта
-   * @param model модель для передачи данных
-   * @return главную страницу
-   */
-  @GetMapping()
-  @RequestMapping(
-    value = {"/"}
-  )
-  public ModelAndView index(Model model){
-    String msg = "Hello, user!!!";
-    model.addAttribute("message",msg);
-    return new ModelAndView("index");
-  }
-
-  /**
-   * Получение страницы регистрации
-   * @return страницу регистрации
-   */
-  @GetMapping("/register")
-  public ModelAndView signUpForm(){
-    return new ModelAndView("register");
-  }
-
-  /**
    * Регистрация пользователя
-   * @param file картинка пользователя
-   * @param user данные пользователя
-   * @param model модель для передачи данных
-   * @return страницу логина
-   * @throws IOException
+   *
+   * @param userDTO данные пользователя
+   * @return данные созданного пользователя
+   * @throws EmailAlreadyInUseException почта занята
+   * @throws IOException                io exc
    */
-  @PostMapping("/register")
-  public ModelAndView signUpUser(@RequestParam MultipartFile file, User user, ModelMap model) throws IOException {
+  @PostMapping(value = "", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<UserDto> signUpUser(@RequestBody UserDto userDTO) throws IOException, EmailAlreadyInUseException {
 
-    User existingUser = userRepo.findByUsername(user.getUsername());
-    if(existingUser != null){
-      model.addAttribute("message","user exists");
-      return new ModelAndView("register",model);
+    if (userDTO == null) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    var password = passwordEncoder.encode(userDTO.getPassword());
+    userDTO.setPassword(password);
+    User user = userStruct.fromDto(userDTO);
     user.setBalance(0);
-    user.setPhoto(photoService.store(file));
+//    user.setPhoto(photoService.store(file));
     user.setActive(true);
     user.setRoles(Collections.singleton(Role.USER));
 
-    userRepo.save(user);
+    if (userRepo.findByUsername(userDTO.getUsername()) != null) {
+      throw new EmailAlreadyInUseException(userDTO.getUsername());
+    }
 
-    return new ModelAndView("redirect:/login");
+    return new ResponseEntity<>(userStruct.map(userRepo.save(user)), HttpStatus.CREATED);
   }
 
   /**
-   * исключает ошибку отсутствия картинки сайта
+   * Логин пользователя
+   *
+   * @param loginUserDto данные для входа
+   * @return токен и айди пользователя
+   * @throws EntityNotFoundException пользователь не найден
    */
-  @GetMapping("/favicon.ico")
-  @ResponseBody
-  void returnNoFavicon() {
+  @RequestMapping(method = POST, path = "/login")
+  public ResponseEntity<AuthInfoDto> loginUser(@RequestBody UserDto loginUserDto) throws EntityNotFoundException {
+    AuthInfoDto authInfoDto = null;
+
+    var user = userRepo.findByUsername(loginUserDto.getUsername());
+    if (user == null)
+      throw new EntityNotFoundException(loginUserDto.getUsername());
+
+    if (passwordEncoder.matches(loginUserDto.getPassword(), user.getPassword())) {
+      authInfoDto = generateTokenFromUser(user);
+    }
+
+    return authInfoDto != null
+      ? new ResponseEntity<AuthInfoDto>(authInfoDto, HttpStatus.OK)
+      : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+  }
+
+  public AuthInfoDto generateTokenFromUser(User user) {
+    return new AuthInfoDto(jwtSupplier.createTokenForUser(user.getUsername()), user.getId());
   }
 
 }

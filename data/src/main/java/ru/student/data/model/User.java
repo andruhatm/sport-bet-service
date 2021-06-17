@@ -1,6 +1,8 @@
 package ru.student.data.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -10,30 +12,26 @@ import java.util.Set;
 @Entity
 @Table(name = "clients", schema = "public")
 public class User {
+
   /**
    * айди юзера
    */
   @Id
   @Column(name = "client_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Integer id;
+
   /**
    * имя юзера
    */
   @Column
   private String username;
+
   /**
    * пароль юзера
    */
   @Column
   private String password;
-
-  /**
-   * поле фото
-   */
-  @ManyToOne(targetEntity = Photo.class)
-  @JoinColumn(name = "photo_id")
-  private Photo photo;
 
   /**
    * поле активности
@@ -47,18 +45,44 @@ public class User {
   @Column
   private double balance;
 
+  /**
+   * поле ставок
+   */
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+  private List<Bet> bets;
+
+  /**
+   * поле фото
+   */
+//  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+//  private List<Photo> photo;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+  @org.hibernate.annotations.OrderBy(clause = "dateAdded DESC NULLS LAST")
+  private List<Media> medias = new ArrayList<>();
+
   @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
   @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
   @Enumerated(EnumType.STRING)
   private Set<Role> roles;
 
-//  @JoinTable(name = "roles",joinColumns = @JoinColumn(name = "user_id"))
+  //  @JoinTable(name = "roles",joinColumns = @JoinColumn(name = "user_id"))
 
-  public Long getId() {
+
+//  public void setPhoto(List<Photo> photo) {
+//    this.photo = photo;
+//  }
+
+
+  public List<Media> getMedias() {
+    return medias;
+  }
+
+  public Integer getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -94,12 +118,20 @@ public class User {
     this.active = active;
   }
 
-  public Photo getPhoto() {
-    return photo;
+//  public List<Photo> getPhoto() {
+//    return photo;
+//  }
+//
+//  public void setPhoto(Photo photo) {
+//    this.photo.add(photo);
+//  }
+
+  public List<Bet> getBets() {
+    return bets;
   }
 
-  public void setPhoto(Photo photo) {
-    this.photo = photo;
+  public void setBets(List<Bet> bets) {
+    this.bets = bets;
   }
 
   public double getBalance() {
@@ -110,14 +142,33 @@ public class User {
     this.balance = balance;
   }
 
+  public void setMedias(List<Media> medias) {
+    if (medias != null) {
+      if (!this.medias.isEmpty()) {
+        this.medias.clear();
+      }
+      this.medias.addAll(medias);
+      for (Media m : medias) {
+        m.setUser(this);
+      }
+    }
+  }
+  public void addMediaUser(Media media) {
+    this.medias.add(media);
+    media.setUser(this);
+  }
+
   @Override
   public String toString() {
     return "User{" +
       "id=" + id +
       ", username='" + username + '\'' +
       ", password='" + password + '\'' +
-      ", photo=" + photo +
       ", active=" + active +
+      ", balance=" + balance +
+      ", photo=" + medias +
+      ", bets=" + bets +
+      ", roles=" + roles +
       '}';
   }
 }

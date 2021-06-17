@@ -14,30 +14,9 @@ public class Bet {
    * поле айди
    */
   @Id
-  @Column(name = "bet_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-
-  /**
-   * поле события {@link Event}
-   */
-  @ManyToOne
-  @JoinColumn(name = "event_id")
-  private Event event;
-
-  /**
-   * поле валюты {@link Currency}
-   */
-  @ManyToOne(targetEntity = Currency.class)
-  @JoinColumn(name = "currency_id")
-  private Currency currency;
-
-  /**
-   * поле юзера {@link User}
-   */
-  @ManyToOne(targetEntity = User.class)
-  @JoinColumn(name = "client_id")
-  private User user;
+  @Column(name = "bet_id")
+  private Integer id;
 
   /**
    * поле величина ставки
@@ -57,6 +36,28 @@ public class Bet {
   @Column(name = "winner")
   private String real_winner;
 
+  /**
+   * поле события {@link Event}
+   */
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "event_id")
+  private Event event;
+
+  /**
+   * поле валюты {@link Currency}
+   */
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "currency_id")
+  private Currency currency;
+
+  /**
+   * поле юзера {@link User}
+   */
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "client_id")
+  private User user;
+
+
   public Bet() {
   }
 
@@ -68,11 +69,12 @@ public class Bet {
     this.winner = winner;
   }
 
-  public Long getId() {
+
+  public Integer getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 

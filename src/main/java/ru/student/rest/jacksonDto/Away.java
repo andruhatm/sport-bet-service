@@ -1,4 +1,4 @@
-package ru.student.rest.dto;
+package ru.student.rest.jacksonDto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

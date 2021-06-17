@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "currency")
 public class Currency {
+
   /**
    * поле айди
    */
@@ -28,6 +29,9 @@ public class Currency {
    */
   @Column(name = "exchange")
   private Double exchange;
+
+  public Currency() {
+  }
 
   public Integer getId() {
     return id;

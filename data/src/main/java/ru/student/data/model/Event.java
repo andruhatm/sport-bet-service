@@ -3,6 +3,7 @@ package ru.student.data.model;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Таблица событий.
@@ -18,32 +19,39 @@ public class Event {
   @Id
   @Column(name = "event_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Integer id;
+
   /**
    * поле даты события
    */
   @Column
   private Timestamp date;
+
   /**
    * наименование события
    */
   @Column
   private String name;
+
   /**
    * имя домашней команды
    */
   @Column(name = "home_team")
   private String home;
+
   /**
    * имя приезжей команды
    */
   @Column(name = "away_team")
   private String away;
 
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "event", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+  private List<Bet> bets;
+
   public Event() {
   }
 
-  public Event(Long id, Date date, String name, String home, String away) {
+  public Event(Integer id, Date date, String name, String home, String away) {
     this.id = id;
     this.date = new Timestamp(date.getTime()*1000);
     this.name = name;
@@ -51,12 +59,20 @@ public class Event {
     this.away = away;
   }
 
-  public Long getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
+  }
+
+  public List<Bet> getBets() {
+    return bets;
+  }
+
+  public void setBets(List<Bet> bets) {
+    this.bets = bets;
   }
 
   public Timestamp getDate() {

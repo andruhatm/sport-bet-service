@@ -9,8 +9,34 @@ repositories {
     mavenCentral()
 }
 
+compileJava {
+  options.compilerArgs += [
+    "-Amapstruct.defaultComponentModel=spring",
+    "-Amapstruct.unmappedTargetPolicy=ERROR"
+  ]
+}
+
 dependencies {
   testCompile group: 'junit', name: 'junit', version: '4.12'
   implementation "org.hibernate:hibernate-core:5.4.23.Final"
+  compileOnly 'org.projectlombok:lombok:1.18.8'
+
+  implementation group: 'org.springframework.security', name: 'spring-security-web', version: '5.4.5'
+
+  implementation 'org.springframework.boot:spring-boot-starter-web:2.3.3.RELEASE'
+
+  runtime 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+  implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+
+  runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.1'
+
+  implementation "org.springframework.boot:spring-boot-autoconfigure:$spring_boot_ver"
+
+  compileOnly 'org.projectlombok:lombok:1.18.2'
+  annotationProcessor 'org.projectlombok:lombok:1.18.2'
+
+  compileOnly "org.mapstruct:mapstruct:$mapstruct_ver"
+  annotationProcessor "org.mapstruct:mapstruct-processor:$mapstruct_ver"
+
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.3.4.RELEASE'
 }

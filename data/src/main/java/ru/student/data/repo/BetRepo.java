@@ -11,5 +11,5 @@ import java.util.List;
  * @author andruha.tm
  */
 public interface BetRepo extends JpaRepository<Bet,String> {
-  List<Bet> findAllByUser_Id(Long user_id);
+  List<Bet> findAllByUser_Id(Integer user_id);
 }

@@ -1,10 +1,14 @@
 package ru.student.rest.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ru.student.data.dto.BetDTO;
+import ru.student.data.dto.BetDto;
+import ru.student.data.mapstruct.BetStruct;
 import ru.student.data.model.Bet;
 import ru.student.data.model.Currency;
 import ru.student.data.model.Event;
@@ -23,107 +27,81 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author andruha.tm
  */
 @RestController
+@RequestMapping("/bets/")
 public class BetsController {
-	/**
-	 * поле репозитория событий
-	 */
-	private final EventRepo eventRepo;
-	/**
-	 * поле репозитория пользователей
-	 */
-	private final UserRepo userRepo;
-	/**
-	 * поле репозитория ставок
-	 */
-	private final BetRepo betRepo;
-	/**
-	 * поле репозитория валюты
-	 */
-	private final CurrencyRepo currencyRepo;
+  /**
+   * поле репозитория событий
+   */
+  private final EventRepo eventRepo;
+  /**
+   * поле репозитория пользователей
+   */
+  private final UserRepo userRepo;
+  /**
+   * поле репозитория ставок
+   */
+  private final BetRepo betRepo;
+  /**
+   * поле репозитория валюты
+   */
+  private final CurrencyRepo currencyRepo;
+  /**
+   * Маппер для ставок
+   */
+  private final BetStruct betStruct;
 
-	@Autowired
-	public BetsController(EventRepo eventRepo, UserRepo userRepo, BetRepo betRepo, CurrencyRepo currencyRepo) {
-		this.currencyRepo = currencyRepo;
-		this.eventRepo = eventRepo;
-		this.userRepo = userRepo;
-		this.betRepo = betRepo;
-	}
+  @Autowired
+  public BetsController(EventRepo eventRepo, UserRepo userRepo, BetRepo betRepo, CurrencyRepo currencyRepo, BetStruct betStruct) {
+    this.currencyRepo = currencyRepo;
+    this.eventRepo = eventRepo;
+    this.betStruct = betStruct;
+    this.userRepo = userRepo;
+    this.betRepo = betRepo;
+  }
 
-	/**
-	 * Получение формы новой ставки
-	 *
-	 * @param model модель для передачи данных на форму
-	 * @param event имя события
-	 * @return страница новой ставкиы
-	 */
-	@GetMapping("/bet")
-	public ModelAndView newBetForm(Model model, @RequestParam(name = "event", required = true) String event) {
-		String event1 = event.replace("+", " ");
-		model.addAttribute("event", eventRepo.getByName(event1));
-		return new ModelAndView("makeBet");
-	}
+  /**
+   * Создание новой ставки
+   *
+   * @param userId айди пользователя
+   * @param betDTO данные ставки
+   * @return сохраненная ставка
+   */
+  @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<BetDto> placeBet(
+    Integer userId,
+    @RequestBody BetDto betDTO
+  ) {
+//    String event1 = event.replace("+", " ");
 
-	/**
-	 * Создание новой ставки
-	 *
-	 * @param principal текущий пользователь
-	 * @param event     имя события
-	 * @param betDTO    данные ставки
-	 * @param model     модель для передачи данных на форму
-	 * @return страницу событий
-	 */
-	@PostMapping("/bet")
-	public ModelAndView placeBet(
-					Principal principal,
-					@RequestParam(name = "event", required = true) String event,
-					BetDTO betDTO,
-					Model model
-	) {
-		String event1 = event.replace("+", " ");
-		Event event2 = eventRepo.getByName(event1);
-		Bet bet = new Bet();
-		bet.setUser(userRepo.findByUsername(principal.getName()));
-		bet.setAmount(betDTO.getMoney());
-		bet.setEvent(event2);
-		switch (betDTO.getCurrency()) {
-			case "1":
-				bet.setCurrency(currencyRepo.getById(1));
-				break;
-			case "2":
-				bet.setCurrency(currencyRepo.getById(2));
-				break;
-			case "3":
-				bet.setCurrency(currencyRepo.getById(3));
-				break;
-			default:
-				bet.setCurrency(currencyRepo.getById(1));
-		}
-		if (betDTO.getWinner().equals("home")) {
-			bet.setWinner(event2.getHome());
-		} else {
-			bet.setWinner(event2.getAway());
-		}
-		//generating result of game
-		int i = ThreadLocalRandom.current().nextInt(0, 1);
-		if (i != 1) {
-			bet.setReal_winner(event2.getHome());
-		} else {
-			bet.setReal_winner(event2.getAway());
-		}
-		betRepo.save(bet);
+    if (betDTO == null) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+    Event event2 = eventRepo.getById(betDTO.getEvent().getId());
+    Bet bet = betStruct.fromDto(betDTO);
+//    User user = userRepo.findById(userId);
 
-		User updatableUser = userRepo.findByUsername(principal.getName());
-		//checks if winner equals to Clients prediction
-		Currency currency = currencyRepo.getById(bet.getCurrency().getId());
-		if (bet.getWinner().equals(bet.getReal_winner())) {
-			updatableUser.setBalance(updatableUser.getBalance() + bet.getAmount() * currency.getExchange());
-			userRepo.flush();
-		} else {
-			updatableUser.setBalance(updatableUser.getBalance() - bet.getAmount() * currency.getExchange());
-			userRepo.flush();
-		}
+    //generating result of game
+    int i = ThreadLocalRandom.current().nextInt(0, 1);
+    if (i != 1) {
+      bet.setReal_winner(event2.getHome());
+    } else {
+      bet.setReal_winner(event2.getAway());
+    }
 
-		return new ModelAndView("redirect:/account");
-	}
+    User updatableUser = userRepo.findById(userId);
+    //checks if winner equals to Clients prediction
+    Currency currency = currencyRepo.getById(bet.getCurrency().getId());
+    if (bet.getWinner().equals(bet.getReal_winner())) {
+      updatableUser.setBalance(updatableUser.getBalance() + bet.getAmount() * currency.getExchange());
+      userRepo.flush();
+    } else {
+      updatableUser.setBalance(updatableUser.getBalance() - bet.getAmount() * currency.getExchange());
+      userRepo.flush();
+    }
+    bet.setUser(updatableUser);
+    Bet newBet = betRepo.save(bet);
+
+    return new ResponseEntity<>(betStruct.toDto(newBet), HttpStatus.CREATED);
+  }
 
 }

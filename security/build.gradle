@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+  id 'java'
 }
 
 ext{
@@ -10,10 +10,12 @@ group 'ru.andruha|tm'
 version '1.0-SNAPSHOT'
 
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
+  runtime 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+  implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
   implementation "org.springframework.boot:spring-boot-starter-security:$secVer"
   implementation "javax:javaee-api:8.0.1"
 }

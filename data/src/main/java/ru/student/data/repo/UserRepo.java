@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.student.data.model.User;
 
+import java.util.Optional;
+
 /**
  * Репозиторий для пользователей.
  *
@@ -13,4 +15,7 @@ import ru.student.data.model.User;
 public interface UserRepo extends JpaRepository<User,Long> {
   User findByUsername(String username);
 
+//  Optional<User> findById(Integer userId);
+
+  User findById(Integer userId);
 }
