@@ -2,7 +2,6 @@ package ru.student.data.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.student.data.model.Photo;
 import ru.student.data.model.Role;
 
 import java.util.List;

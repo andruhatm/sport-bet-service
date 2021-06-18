@@ -7,7 +7,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import ru.student.data.dto.AuthInfoDto;
 import ru.student.data.dto.UserDto;
 import ru.student.data.mapstruct.UserStruct;
@@ -15,7 +14,6 @@ import ru.student.data.model.Role;
 import ru.student.data.model.User;
 import ru.student.data.repo.UserRepo;
 import ru.student.rest.exception.EmailAlreadyInUseException;
-import ru.student.rest.service.PhotoService;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
@@ -38,11 +36,6 @@ public class PublicController {
   private final UserRepo userRepo;
 
   /**
-   * поле репозитория фото
-   */
-  private final PhotoService photoService;
-
-  /**
    * Маппер для пользователей
    */
   private final UserStruct userStruct;
@@ -58,12 +51,11 @@ public class PublicController {
   private final JwtSupplier jwtSupplier;
 
   @Autowired
-  public PublicController(UserRepo userRepo, PhotoService photoService, UserStruct userStruct, PasswordEncoder passwordEncoder, JwtSupplier jwtSupplier) {
+  public PublicController(UserRepo userRepo, UserStruct userStruct, PasswordEncoder passwordEncoder, JwtSupplier jwtSupplier) {
     this.jwtSupplier = jwtSupplier;
     this.passwordEncoder = passwordEncoder;
     this.userStruct = userStruct;
     this.userRepo = userRepo;
-    this.photoService = photoService;
   }
 
   /**

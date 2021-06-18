@@ -62,13 +62,12 @@ public class BetsController {
   /**
    * Создание новой ставки
    *
-   * @param userId айди пользователя
    * @param betDTO данные ставки
    * @return сохраненная ставка
    */
   @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<BetDto> placeBet(
-    Integer userId,
+//    Integer userId,
     @RequestBody BetDto betDTO
   ) {
 //    String event1 = event.replace("+", " ");
@@ -88,7 +87,7 @@ public class BetsController {
       bet.setReal_winner(event2.getAway());
     }
 
-    User updatableUser = userRepo.findById(userId);
+    User updatableUser = userRepo.findById(betDTO.getUser().getId());
     //checks if winner equals to Clients prediction
     Currency currency = currencyRepo.getById(bet.getCurrency().getId());
     if (bet.getWinner().equals(bet.getReal_winner())) {

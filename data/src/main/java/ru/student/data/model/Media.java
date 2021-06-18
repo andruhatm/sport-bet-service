@@ -36,6 +36,10 @@ public class Media implements Serializable {
   @Column(name = "security_url")
   private String securityUrl;
 
+  @CreationTimestamp
+  @Column(name = "date_added")
+  private LocalDateTime dateAdded;
+
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "client_id", nullable = true)
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
