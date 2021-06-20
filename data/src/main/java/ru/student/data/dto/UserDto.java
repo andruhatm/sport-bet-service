@@ -18,5 +18,7 @@ public class UserDto {
   private List<BetDto> bets;
   private Set<Role> roles;
   private List<MediaDTO> medias;
+  private Integer pictureId;
+  private PictureGetDto picture;
 //  private List<PhotoDto> photo;
 }

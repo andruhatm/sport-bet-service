@@ -45,37 +45,37 @@ public class User {
   @Column
   private double balance;
 
-//  /**
-//   * поле ставок
-//   */
-//  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-//  private List<Bet> bets;
-
-  /**
-   * поле фото
-   */
-//  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-//  private List<Photo> photo;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
   @org.hibernate.annotations.OrderBy(clause = "dateAdded DESC NULLS LAST")
   private List<Media> medias = new ArrayList<>();
 
+  /**
+   * поле роль
+   */
   @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
   @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
   @Enumerated(EnumType.STRING)
   private Set<Role> roles;
 
-  //  @JoinTable(name = "roles",joinColumns = @JoinColumn(name = "user_id"))
-
-
-//  public void setPhoto(List<Photo> photo) {
-//    this.photo = photo;
-//  }
+  /**
+   * поле фото
+   */
+  @JoinColumn(name = "picture_id")
+  @ManyToOne(targetEntity = Picture.class)
+  private Picture picture;
 
 
   public List<Media> getMedias() {
     return medias;
+  }
+
+  public Picture getPicture() {
+    return picture;
+  }
+
+  public void setPicture(Picture picture) {
+    this.picture = picture;
   }
 
   public Integer getId() {
@@ -117,22 +117,6 @@ public class User {
   public void setActive(boolean active) {
     this.active = active;
   }
-
-//  public List<Photo> getPhoto() {
-//    return photo;
-//  }
-//
-//  public void setPhoto(Photo photo) {
-//    this.photo.add(photo);
-//  }
-
-//  public List<Bet> getBets() {
-//    return bets;
-//  }
-//
-//  public void setBets(List<Bet> bets) {
-//    this.bets = bets;
-//  }
 
   public double getBalance() {
     return balance;

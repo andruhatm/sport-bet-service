@@ -7,29 +7,17 @@ import ru.student.data.model.User;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {MediaStruct.class, EventStruct.class, BetStruct.class, CurrencyStruct.class, PhotoStruct.class})
+@Mapper(componentModel = "spring", uses = {MediaStruct.class, EventStruct.class, BetStruct.class, CurrencyStruct.class, PhotoStruct.class, PictureMapper.class})
 public interface UserStruct {
-
-//  @Autowired
-//  private EventStruct eventStruct;
-//
-//  @Autowired
-//  private PhotoStruct photoStruct;
-//
-//  @Autowired
-//  private CurrencyStruct currencyStruct;
-//
-//  @Autowired
-//  private BetStruct betStruct;
 
   @Mapping(source = "user.medias", target = "medias")
   UserDto map(User user);
 
+  @Mapping(target = "picture.id", source = "pictureId")
   User fromDto(UserDto user);
 
   List<UserDto> map(List<User> user);
 
   List<User> fromDto(List<UserDto> user);
-
 
 }

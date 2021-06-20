@@ -44,7 +44,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
       .sessionManagement().sessionCreationPolicy(STATELESS)
       .and()
       .authorizeRequests()
+      .antMatchers("/api/").permitAll()
       .antMatchers("/", "/register", "/favicon.ico", "/css/**", "/js/**", "/images/**").permitAll()
+      .antMatchers("/api/picture").permitAll()
       .antMatchers(POST, "/ru.student.security.security/*").anonymous()
 //      .antMatchers(POST, "/ru.student.security.security/").permitAll()
       .antMatchers(POST, "/ru.student.security.security/login").permitAll()
@@ -58,7 +60,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
       .and()
       .addFilterBefore(fIlterForJwt, UsernamePasswordAuthenticationFilter.class)
       .logout()
-      .logoutUrl("/ru.student.security.security/logout")
+      .logoutUrl("/security/logout")
       .permitAll()
       .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> httpServletResponse.setStatus(HttpServletResponse.SC_OK));
 

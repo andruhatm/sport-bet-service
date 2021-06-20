@@ -12,10 +12,9 @@ import java.util.Optional;
  * @author andruha.tm
  */
 @Repository
-public interface UserRepo extends JpaRepository<User,Long> {
-  User findByUsername(String username);
+public interface UserRepo extends JpaRepository<User, Long> {
 
-//  Optional<User> findById(Integer userId);
+  User findByUsername(String username);
 
   User findById(Integer userId);
 }
