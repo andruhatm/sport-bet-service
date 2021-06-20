@@ -3,9 +3,7 @@ package ru.student.data.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import ru.student.data.model.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,7 +12,7 @@ import java.util.UUID;
 
 @Data
 @Entity
-@DynamicInsert
+//@DynamicInsert
 @DynamicUpdate
 @Table(name = "media")
 public class Media implements Serializable {
@@ -44,5 +42,10 @@ public class Media implements Serializable {
   @JoinColumn(name = "client_id", nullable = true)
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private User user;
+
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @JoinColumn(name = "categories_file_categories_file_id", nullable = false)
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private CategoryFile categoriesFile;
 
 }

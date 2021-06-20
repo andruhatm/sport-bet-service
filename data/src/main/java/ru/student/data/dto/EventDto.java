@@ -15,5 +15,5 @@ public class EventDto {
   private String name;
   private String home;
   private String away;
-  private List<Bet> bets;
+//  private List<Bet> bets;
 }

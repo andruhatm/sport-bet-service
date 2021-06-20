@@ -45,11 +45,11 @@ public class User {
   @Column
   private double balance;
 
-  /**
-   * поле ставок
-   */
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-  private List<Bet> bets;
+//  /**
+//   * поле ставок
+//   */
+//  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+//  private List<Bet> bets;
 
   /**
    * поле фото
@@ -126,13 +126,13 @@ public class User {
 //    this.photo.add(photo);
 //  }
 
-  public List<Bet> getBets() {
-    return bets;
-  }
-
-  public void setBets(List<Bet> bets) {
-    this.bets = bets;
-  }
+//  public List<Bet> getBets() {
+//    return bets;
+//  }
+//
+//  public void setBets(List<Bet> bets) {
+//    this.bets = bets;
+//  }
 
   public double getBalance() {
     return balance;
@@ -167,7 +167,7 @@ public class User {
       ", active=" + active +
       ", balance=" + balance +
       ", photo=" + medias +
-      ", bets=" + bets +
+//      ", bets=" + bets +
       ", roles=" + roles +
       '}';
   }

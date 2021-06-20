@@ -117,6 +117,8 @@ public class ServiceController {
     return new ResponseEntity<>(betMapper.toDto(betList), HttpStatus.OK);
   }
 
+  
+
   /**
    * Получение доступных событий
    *

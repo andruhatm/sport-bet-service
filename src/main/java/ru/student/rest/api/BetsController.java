@@ -8,7 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.student.data.dto.BetDto;
+import ru.student.data.dto.CurrencyDto;
+import ru.student.data.dto.EventDto;
 import ru.student.data.mapstruct.BetStruct;
+import ru.student.data.mapstruct.CurrencyStruct;
+import ru.student.data.mapstruct.EventStruct;
 import ru.student.data.model.Bet;
 import ru.student.data.model.Currency;
 import ru.student.data.model.Event;
@@ -19,6 +23,7 @@ import ru.student.data.repo.EventRepo;
 import ru.student.data.repo.UserRepo;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -49,10 +54,20 @@ public class BetsController {
    * Маппер для ставок
    */
   private final BetStruct betStruct;
+  /**
+   * Маппер для событий
+   */
+  private final EventStruct eventStruct;
+  /**
+   * Маппер для валют
+   */
+  private final CurrencyStruct currencyStruct;
 
   @Autowired
-  public BetsController(EventRepo eventRepo, UserRepo userRepo, BetRepo betRepo, CurrencyRepo currencyRepo, BetStruct betStruct) {
+  public BetsController(EventRepo eventRepo, UserRepo userRepo, BetRepo betRepo, CurrencyRepo currencyRepo, BetStruct betStruct, EventStruct eventStruct, CurrencyStruct currencyStruct) {
+    this.currencyStruct = currencyStruct;
     this.currencyRepo = currencyRepo;
+    this.eventStruct = eventStruct;
     this.eventRepo = eventRepo;
     this.betStruct = betStruct;
     this.userRepo = userRepo;
@@ -102,5 +117,21 @@ public class BetsController {
 
     return new ResponseEntity<>(betStruct.toDto(newBet), HttpStatus.CREATED);
   }
+
+  @GetMapping(value = "{eventId}/", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<EventDto> getById(@PathVariable("eventId")Integer eventId){
+    if (eventId == null){
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+    Event event = eventRepo.getById(eventId);
+    return new ResponseEntity<>(eventStruct.toDto(event),HttpStatus.OK);
+  }
+
+  @GetMapping(value = "currency/", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<List<CurrencyDto>> getCurrencies(){
+    List<Currency> currencies = currencyRepo.findAll();
+    return new ResponseEntity<>(currencyStruct.toDto(currencies),HttpStatus.OK);
+  }
+
 
 }

@@ -1,5 +1,4 @@
-package ru.student.rest.jacksonDto;
-
+package ru.student.data.jackson.jacksonDto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -15,7 +14,7 @@ public class NewEvent {
    * айди события
    */
   @JsonProperty("id")
-  private Long event_id;
+  private Integer event_id;
   /**
    * дата
    */
@@ -37,11 +36,11 @@ public class NewEvent {
   @JsonProperty("away")
   private Away away;
 
-  public Long getEvent_id() {
+  public Integer getEvent_id() {
     return event_id;
   }
 
-  public void setEvent_id(Long event_id) {
+  public void setEvent_id(Integer event_id) {
     this.event_id = event_id;
   }
 
@@ -80,3 +79,4 @@ public class NewEvent {
     this.away = away;
   }
 }
+

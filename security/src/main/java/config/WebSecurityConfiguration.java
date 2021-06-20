@@ -13,7 +13,6 @@ import config.secure.FIlterForJwt;
 import javax.servlet.http.HttpServletResponse;
 
 import static org.springframework.http.HttpMethod.*;
-//import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 /**

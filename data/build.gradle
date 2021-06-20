@@ -12,7 +12,7 @@ repositories {
 compileJava {
   options.compilerArgs += [
     "-Amapstruct.defaultComponentModel=spring",
-    "-Amapstruct.unmappedTargetPolicy=ERROR"
+//    "-Amapstruct.unmappedTargetPolicy=ERROR"
   ]
 }
 
