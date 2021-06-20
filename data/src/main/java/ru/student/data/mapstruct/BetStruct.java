@@ -29,12 +29,6 @@ public abstract class BetStruct {
 
   public abstract Bet fromDto(BetDto betDto);
 
-  /**
-   * Превращение списка Bet в список BetDto.
-   *
-   * @param bets список Bet
-   * @return список BetDto
-   */
   public abstract List<BetDto> toDto(List<Bet> bets);
 
   public abstract List<Bet> fromDto(List<BetDto> bets);

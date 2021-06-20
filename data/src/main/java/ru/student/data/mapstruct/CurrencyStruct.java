@@ -11,6 +11,9 @@ import ru.student.data.model.User;
 
 import java.util.List;
 
+/**
+ * Маппер для валют
+ */
 @Mapper(componentModel = "spring", uses = {EventStruct.class, BetStruct.class, UserStruct.class})
 public abstract class CurrencyStruct {
 

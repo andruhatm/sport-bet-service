@@ -11,6 +11,9 @@ import ru.student.data.repo.PictureRepo;
 
 import java.io.IOException;
 
+/**
+ * Имплементация сервиса работы с картинками
+ */
 @Service
 public class PictureServiceImpl implements PictureService {
 

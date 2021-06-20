@@ -77,7 +77,6 @@ public class PublicController {
     userDTO.setPassword(password);
     User user = userStruct.fromDto(userDTO);
     user.setBalance(0);
-//    user.setPhoto(photoService.store(file));
     user.setActive(true);
     user.setRoles(Collections.singleton(Role.USER));
 
@@ -106,7 +105,6 @@ public class PublicController {
     if (passwordEncoder.matches(loginUserDto.getPassword(), user.getPassword())) {
       authInfoDto = generateTokenFromUser(user);
     }
-
     return authInfoDto != null
       ? new ResponseEntity<AuthInfoDto>(authInfoDto, HttpStatus.OK)
       : new ResponseEntity<>(HttpStatus.BAD_REQUEST);

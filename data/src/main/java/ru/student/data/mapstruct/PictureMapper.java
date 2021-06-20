@@ -9,6 +9,9 @@ import ru.student.data.model.Picture;
 
 import java.util.List;
 
+/**
+ * Маппер для картинок
+ */
 @Mapper(componentModel = "spring")
 public interface PictureMapper {
 

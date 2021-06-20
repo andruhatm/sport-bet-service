@@ -3,6 +3,9 @@ package ru.student.rest.exception;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * Обработка ошибки почты
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class EmailAlreadyInUseException extends Exception{

@@ -7,7 +7,10 @@ import ru.student.data.model.User;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {MediaStruct.class, EventStruct.class, BetStruct.class, CurrencyStruct.class, PhotoStruct.class, PictureMapper.class})
+/**
+ * Маппер для пользователя
+ */
+@Mapper(componentModel = "spring", uses = {MediaStruct.class, EventStruct.class, BetStruct.class, CurrencyStruct.class, PictureMapper.class})
 public interface UserStruct {
 
   @Mapping(source = "user.medias", target = "medias")

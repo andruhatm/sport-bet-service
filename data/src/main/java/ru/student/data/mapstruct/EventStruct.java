@@ -12,7 +12,7 @@ import ru.student.data.model.User;
 import java.util.List;
 
 /**
- * Маппер для ставок
+ * Маппер для событий
  */
 @Mapper(componentModel = "spring", uses = {UserStruct.class, CurrencyStruct.class, BetStruct.class})
 public abstract class EventStruct {

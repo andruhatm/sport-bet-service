@@ -18,30 +18,34 @@ public class BetDto {
    */
   private Integer id;
 
-  //required
   /**
    * величина ставки
    */
   private Double amount;
 
-  //required
   /**
-   * имя команды победителя
+   * имя команды предположительного победителя
    */
   private String winner;
 
+  /**
+   * имя команды победителя
+   */
   private String real_winner;
 
-  //required
+  /**
+   * поле события
+   */
   private EventDto event;
 
-  //required
   /**
    * тип валюты
    */
   private CurrencyDto currency;
 
-  //required
+  /**
+   * поле пользователя
+   */
   private UserDto user;
 
 }

@@ -82,17 +82,14 @@ public class BetsController {
    */
   @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<BetDto> placeBet(
-//    Integer userId,
     @RequestBody BetDto betDTO
   ) {
-//    String event1 = event.replace("+", " ");
 
     if (betDTO == null) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
     Event event2 = eventRepo.getById(betDTO.getEvent().getId());
     Bet bet = betStruct.fromDto(betDTO);
-//    User user = userRepo.findById(userId);
 
     //generating result of game
     int i = ThreadLocalRandom.current().nextInt(0, 1);
@@ -103,6 +100,7 @@ public class BetsController {
     }
 
     User updatableUser = userRepo.findById(betDTO.getUser().getId());
+
     //checks if winner equals to Clients prediction
     Currency currency = currencyRepo.getById(bet.getCurrency().getId());
     if (bet.getWinner().equals(bet.getReal_winner())) {

@@ -19,11 +19,20 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 
+/**
+ * Шедулер для выполнения мграции данных
+ */
 @Component
 public class Sheduler {
 
+  /**
+   * поле логера
+   */
   static final Logger logger = LoggerFactory.getLogger(Sheduler.class);
 
+  /**
+   * поле репозитория
+   */
   private final EventRepo eventRepo;
 
   @Autowired
@@ -31,6 +40,10 @@ public class Sheduler {
     this.eventRepo = eventRepo;
   }
 
+  /**
+   * Метод запроса к внешнему источнику
+   * @throws JsonProcessingException ошибка парсинга
+   */
   @Scheduled(cron = "0 0 0/12 * * ?")
   public void main() throws JsonProcessingException {
     logger.info("migration begins");
@@ -48,8 +61,6 @@ public class Sheduler {
     }
 
     if (response != null) {
-      System.out.println("response not null");
-//      System.out.println(response);
       ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 //      by api

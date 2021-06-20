@@ -7,6 +7,9 @@ import ru.student.data.model.Role;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * дто пользователя
+ */
 @Data
 @NoArgsConstructor
 public class UserDto {

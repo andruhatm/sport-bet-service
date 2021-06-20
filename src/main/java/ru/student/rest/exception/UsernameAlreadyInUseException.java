@@ -3,6 +3,9 @@ package ru.student.rest.exception;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * Обработка ошибки юзернейма
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class UsernameAlreadyInUseException extends Exception{

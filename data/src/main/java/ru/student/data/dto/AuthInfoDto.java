@@ -3,6 +3,9 @@ package ru.student.data.dto;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * dto авторизации
+ */
 public class AuthInfoDto {
     private String token;
     private Integer id;

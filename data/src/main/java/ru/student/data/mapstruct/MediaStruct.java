@@ -10,6 +10,9 @@ import ru.student.data.model.Media;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
+/**
+ * Маппер для медиафайла
+ */
 @Mapper
 public abstract class MediaStruct {
 

@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @Data
 @Entity
-//@DynamicInsert
 @DynamicUpdate
 @Table(name = "media")
 public class Media implements Serializable {

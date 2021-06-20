@@ -25,17 +25,29 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+  /**
+   * фильтр jwt
+   */
   private final FIlterForJwt fIlterForJwt;
 
   public WebSecurityConfiguration(FIlterForJwt fIlterForJwt) {
     this.fIlterForJwt = fIlterForJwt;
   }
 
+  /**
+   * bean енкодера
+   * @return
+   */
   @Bean
   public BCryptPasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
 
+  /**
+   * метод конфигурации
+   * @param http обьект конфигурации
+   * @throws Exception ошибка
+   */
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
@@ -48,7 +60,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
       .antMatchers("/", "/register", "/favicon.ico", "/css/**", "/js/**", "/images/**").permitAll()
       .antMatchers("/api/picture").permitAll()
       .antMatchers(POST, "/ru.student.security.security/*").anonymous()
-//      .antMatchers(POST, "/ru.student.security.security/").permitAll()
       .antMatchers(POST, "/ru.student.security.security/login").permitAll()
       .antMatchers(GET, "/user/events").permitAll()
       .antMatchers(GET, "/user/*/bets").authenticated()

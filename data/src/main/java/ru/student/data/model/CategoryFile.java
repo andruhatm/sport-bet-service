@@ -14,14 +14,23 @@ import java.util.List;
 @Table(name="categories_file")
 public class CategoryFile {
 
+  /**
+   * айди файла
+   */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "categories_file_id", unique = true, nullable = false)
     private Integer categoryFileId;
 
+  /**
+   * имя файла
+   */
     @Column(name="categories_file_name", nullable = false)
     private String categoryFileName;
 
+  /**
+   *  лист медиа
+   */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "categoriesFile")
     private List<Media> media;
 

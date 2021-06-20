@@ -9,6 +9,9 @@ import ru.student.data.repo.CategoryFileRepository;
 
 import java.util.List;
 
+/**
+ * Маппер для категорий медиа
+ */
 @Mapper(componentModel="spring")
 public abstract class CategoriesMediaMapper {
     @Autowired

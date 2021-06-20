@@ -3,6 +3,9 @@ package ru.student.data.dto;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * дто созданной картинки
+ */
 public class PictureGetDto {
 
     private Integer id;

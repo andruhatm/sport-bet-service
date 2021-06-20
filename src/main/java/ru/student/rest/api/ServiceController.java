@@ -80,20 +80,8 @@ public class ServiceController {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
     User existingUser = userRepo.findById(userId);
-
-//    if (existingUser != null) {
-//      model.addAttribute("user", existingUser);
-//      model.addAttribute("encoder", new ImgEncoder());
-//      byte[] encodeBase64 = Base64.getEncoder().encode(existingUser.getPhoto().get(1).getData());
-//      String base64DataString = new String(encodeBase64, StandardCharsets.UTF_8);
-//
-//      model.addAttribute("photo", existingUser.getPhoto());
-//      model.addAttribute("base64DataString", base64DataString);
-
     return new ResponseEntity<>(this.userStruct.map(existingUser), HttpStatus.OK);
-//    }
   }
-
 
   /**
    * Возвращает список ставок пользователя
@@ -117,8 +105,6 @@ public class ServiceController {
     return new ResponseEntity<>(betMapper.toDto(betList), HttpStatus.OK);
   }
 
-  
-
   /**
    * Получение доступных событий
    *
@@ -132,7 +118,6 @@ public class ServiceController {
     @RequestParam(defaultValue = "10") int size
   ) {
     try {
-
       Pageable pageable = PageRequest.of(page, size, Sort.by("date").ascending());
 
       Page<Event> eventDTOList = eventRepo.findAll(pageable);
