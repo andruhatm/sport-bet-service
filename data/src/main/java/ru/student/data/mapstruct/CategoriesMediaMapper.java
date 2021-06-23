@@ -4,7 +4,6 @@ import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.student.data.dto.CategoriesMediaDTO;
 import ru.student.data.model.CategoryFile;
-import ru.student.data.model.EntityNotFoundException;
 import ru.student.data.repo.CategoryFileRepository;
 
 import java.util.List;
@@ -19,11 +18,11 @@ public abstract class CategoriesMediaMapper {
 
     public abstract CategoriesMediaDTO toCategoriesMediaDTo(CategoryFile categoryFile);
     public abstract List<CategoriesMediaDTO> toCategoriesMediaDTos(List<CategoryFile> categoryFile);
-    public CategoryFile findCategoryFileById(CategoriesMediaDTO categoriesMediaDTO) throws EntityNotFoundException {
+    public CategoryFile findCategoryFileById(CategoriesMediaDTO categoriesMediaDTO) {
         if (categoriesMediaDTO != null) {
             int id = categoriesMediaDTO.getCategoryFileId();
             return categoryFileRepository.findById(id).
-                    orElseThrow(() -> new EntityNotFoundException(id, "Category File"));
+                    orElseThrow();
         }else return null;
     }
 }
